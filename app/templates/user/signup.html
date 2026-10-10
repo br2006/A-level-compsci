@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block head %}
+<link rel="stylesheet" href="../static/signup.css">
+{% endblock head %}
+{% block title %}Sign Up{% endblock %}
+
+{% block body %}
+<h2>Sign Up</h2>
+{% include "flashed.html" %}
+
+<div class="sign_up">
+    <form action="{{ url_for('auth.signup_post') }}" method="POST">
+        <div class="email">
+            <!--<label for="email">Email:</label>-->
+            <input type="email" id="email" name="email" placeholder="Email" autocomplete="email" required>
+        </div>
+        <br>
+        <div class="email">
+            <!--<label for="password">Password:</label>-->
+            <input type="password" id="password" name="password" placeholder="Password" autocomplete="new-password" required>
+        </div>
+        <br>
+        <div class="email">
+            <!--<label for="firstname">Firstname:</label>-->
+            <input type="text" id="firstname" name="firstname" placeholder="Name" autocomplete="given-name" required>
+        </div>
+        <br>
+        <div class="email">
+            <!--<label for="lastname">Lastname:</label>-->
+            <input type="text" id="lastname" name="lastname" placeholder="Surname" autocomplete="family-name" required>
+        </div>
+        <br>
+        <div class="email">
+            <!--<label for="username">Username:</label>-->
+            <input type="text" id="username" name="username" placeholder="Username" autocomplete="username" required>
+        </div>
+        <br>
+        <div class="email age">
+            <!--<label for="age">Age:</label>-->
+            <input type="text" id="age" name="age" placeholder="Age" required>
+        </div>
+        <br>
+        <button type="submit">Sign Up</button>
+    </form>
+</div>
+
+{% endblock %}

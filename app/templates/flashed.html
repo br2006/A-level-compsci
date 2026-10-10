@@ -1,0 +1,12 @@
+{% with messages=get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            <a href="{{request.url}}">Click me to reload :)</a>
+        </ul>
+    {% endif %}
+{% endwith %}
+
+

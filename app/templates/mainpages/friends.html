@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/friends.css">
+{% endblock head %}
+
+{% block title %}Friends{% endblock title %}
+
+{% block side %}
+    <div class="sidebar">
+        <a class="aaa home" href="home">home</a>
+        <a class="aaa friends active" href="friends">friends</a>
+        <a class="aaa progress" href="progress">progress</a>
+        <a class="aaa leaderboards" href="leaderboards">leaderboards</a>
+        <a class="aaa settings" href="settings">settings</a>
+    </div>
+{% endblock side %}
+
+
+{% block body %}
+    {% from "macros.html" import suggest_friends with context%}
+    {% from "macros.html" import friend with context%}
+
+
+    <div class="header"><h2>Search for friends</h2></div>
+    <div class="search">
+
+        <form method="post">
+            <div class="searchbar">
+                <input type="textbox" name="username" placeholder="Enter your friend's username ...">
+                <button type="submit"><img src="../static/images/send.svg" alt="send"></button>
+            </div>
+        </form>
+    </div>
+
+    {% if suggested %}
+        <div class="header"><h1>Suggested Friends</h1></div>
+
+        {% for i in suggested %}
+            {{suggest_friends("../static/images/icon.svg", i['username'], i['firstname'], i['lastname'], i['ID'])}}
+        {% endfor %}
+
+    {% endif %}
+    
+    {% if friends %}
+        <div class="header"><h1>Friends</h1></div>
+
+        {% for i in friends %}
+            {{friend("../static/images/icon.svg", i['username'], i['firstname'], i['lastname'], i['ID'])}}
+        {% endfor %}
+
+    {% else %}
+        <div class="header"><h1>Would you like to search for a friend?</h1></div>
+    {% endif %}
+    
+    <script>
+        function add_friend(frdID) {
+            fetch("/addFriend", { // fetches the url /addFriend
+                method: "POST", // sends a post request
+                body: JSON.stringify({ friendID: frdID }), // passes in the data
+              }).then((_res) => { // then reloads the page
+                window.location.href = "/friends";
+              });
+        }
+
+        function remove_friend(frdID) {
+            fetch("/removeFriend", {
+                method: "POST",
+                body: JSON.stringify({friendID: frdID})
+            }).then((_res) => {
+                window.location.href = "/friends"
+            });
+        }
+    </script>
+
+
+
+{% endblock body %}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/leaderboard.css">
+</head>
+<body>
+    <h1>{{title}}</h1> <!--Displays the title-->
+    <table>
+        <tr>
+            <!--Displays a new column for each heading-->
+            {% for heading in headings %}
+                <th>{{heading}}</th> 
+            {% endfor %}
+        </tr>
+
+        {% for row in rows %}
+        <tr>
+            <!--Adds a row into the table for each row-->
+            {% for index in row %}
+                <td>{{row[index]}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

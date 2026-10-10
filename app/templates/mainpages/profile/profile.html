@@ -1,0 +1,57 @@
+{% extends "base.html" %} 
+{% block head %}
+    <link rel="stylesheet" href="../static/card.css">
+    <link rel="stylesheet" href="../static/profile.css">
+{% endblock head %}
+
+{% block side %}
+    <div class="sidebar"> <!--Defines the navigation bar, and which tab is active-->
+        <a class="aaa home" href="/home">home</a>
+        <a class="aaa friends active" href="/friends">profile</a>
+        <a class="aaa progress" href="/progress">progress</a>
+        <a class="aaa leaderboards" href="/leaderboards">leaderboards</a>
+        <a class="aaa settings" href="/settings">settings</a>
+    </div>
+{% endblock side %}
+
+
+
+{% block body %}
+
+
+
+    {% macro friend(icon, username, firstname, lastname, frdID) %}
+        <div class="suggested-friend">
+            <div class="row-onee">
+                <div class="icone"><img src="{{icon}}" alt="img"></div>
+                <div class="usernamee">{{username}}</div>
+                <div class="namee"> {{firstname}} {{lastname}}</div>
+            <!--<button class="button-remove-friend" onclick="remove_friend({{frdID}})"><img src="../static/images/remove-friend.svg" alt="remove_frd"></button>-->
+
+            </div>
+        </div>
+    {%endmacro%}
+
+    {{friend("../static/images/icon.svg", frd['username'], frd['firstname'], frd['lastname'], frd['ID'])}}
+
+
+    <!--These scripts import the chart.js libraries that I need for the graphs-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1"></script>
+
+    {% include "mainpages/profile/heatmap_frd.html" %} <!--This line imports the calendar code-->
+    {% include "mainpages/profile/bar_frd.html" %}<!--This line imports the bar-chart code-->
+
+    
+
+    <div class="spacer" style="margin-bottom: 40px; display: none;">1</div>
+    
+    
+    {% from "macros.html" import card with context%}
+
+    {% for item in cards %}
+        {{card("../static/images/icon.svg", item['username'], item['start'], item['title'], item['description'], 
+        item['duration'], item['address'], item['points'], item['likes'], item['IDD'], item['uID'], loop.index)}}
+    {% endfor %}
+    
+{% endblock body %}

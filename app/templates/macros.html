@@ -1,0 +1,145 @@
+{% macro card(icon, username, date, title, desc, duration, location, intensity, likes, id, uID, num=0) %}
+        <div class="card">
+            <div class="row-one">
+                <div class="card-icon click{{uID}}"><img src="{{icon}}" alt="img" class="icon"></div>
+                <div class="username click{{uID}}">{{ username }}</div>
+                <div class="date" id="date{{num}}">{{ date }}</div>
+            </div>
+            
+            <div class="title">{{ title }}</div>
+            <br>
+            <div class="desc">{{ desc }}</div>
+            <br>
+             <div class="row-four">
+                <div class="duration">{{duration}} Minutes</div>
+                <div class="location">{{location}}</div>
+                <div class="intensity">{{intensity}} points</div>
+             </div>
+            
+             
+            <div class="likes" id="likes{{num}}">{{likes}} Likes</div>
+            <br>
+            <div class="row-six"> <!--(below) shows the thumb icon and action on the onclick-->
+                <div class="thumb"><img src="../static/images/like.svg" onclick="add_like({{id}})" alt="" class="icon"></div>
+                <div class="chat" onclick="location.href='/chat/{{id}}'"><img src="../static/images/chat.svg" alt="" class="icon"></div>
+                <div class="share" id='s_icon{{num}}'><img src="../static/images/share.svg" alt="" class="icon"></div>
+            </div>
+
+            <div class="return-icon">
+                <div class="return"><img src="../static/images/return.svg" onclick="location.href='{{url_for('main.index')}}'" alt="" class="icon"></div>
+            </div>
+            
+        </div>
+        
+        <script>
+            var like_text = document.querySelector('#likes{{num}}').innerHTML
+            if (like_text === "1 Likes") {
+                document.querySelector('#likes{{num}}').innerHTML = "1 Like";
+            }
+            //console.log(like_text)
+        </script>
+
+        <script>
+            var date_text = document.querySelector('#date{{num}}').innerHTML
+            //console.log(date_text)
+            var date_object = new Date(date_text)
+            var day = date_object.getDate()
+            var month = date_object.toLocaleString('default', {month: 'long'})
+
+            // returns the 5 characters of the time, I do this to avoid the seconds column
+            var time = date_object.toLocaleTimeString().substring(0,5) 
+            document.querySelector('#date{{num}}').innerHTML = `${day} ${month} ${time}`
+
+        </script>
+
+        <script>
+            document.querySelector('#s_icon{{num}}').addEventListener('click', event => {
+                console.log('clicked the share icon {{num}}')
+                if (navigator.share) {
+                    navigator.share({
+                        title: '{{username}} - {{title}}',
+                        url: 'chat/{{id}}'
+                    }).then(() => {
+                        console.log('Thanks for sharing!');
+                    }).catch(err => console.error(err))
+                }
+                else {
+                    alert("You can't share on this browser")
+                }
+            })
+        </script>
+
+
+        <script>
+            document.querySelectorAll('.click{{uID}}').forEach(item => {
+                item.addEventListener('click', event => {
+                    //console.log('clicked the icon {{frdID}}')
+                    window.location.href = "/profile/{{uID}}";
+                    
+                })
+            })
+        </script>
+
+    {% endmacro %}
+
+
+{% macro chat(comment, username, ID) %}
+        <div class="chat-box">
+            <div class="chat-row">
+                <!--<div class="card-icon"><img src="{{icon}}" alt="img" class="icon"></div>-->
+                <div class="user"><p><strong>{{ username }}</strong>  {{ comment }}</p></div>
+                <div class="comment"></div>
+            </div>
+        </div>
+{%endmacro%}
+
+{% macro suggest_friends(icon, username, firstname, lastname, frdID) %}
+        <div class="suggested-friend">
+            <div class="row-one">
+                <div class="icon"><img src="{{icon}}" alt="img"></div>
+                <div class="username">{{username}}</div>
+                <div class="name"> {{firstname}} {{lastname}}</div>
+                
+                <button class="button-add-friend" onclick="add_friend({{frdID}})">
+                    <img src="../static/images/add-friend.svg" alt="add_user">
+                </button>
+            </div>
+        </div>
+{%endmacro%}
+
+
+{% macro friend_request(icon, username, firstname, lastname, frdID) %}
+        <div class="suggested-friend">
+            <div class="row-one">
+                <div class="icon"><img src="{{icon}}" alt="img"></div>
+                <div class="username">{{username}}</div>
+                <div class="name"> {{firstname}} {{lastname}}</div>
+                <button class="button-add-friend" onclick="add_friend({{frdID}})"><img src="../static/images/add-friend.svg" alt="add_user"></button>
+                <button class="button-remove-friend" onclick="remove_friend_request({{frdID}})"></button>
+            </div>
+        </div>
+{%endmacro%}
+
+{% macro friend(icon, username, firstname, lastname, frdID) %}
+        <div class="suggested-friend">
+            <div class="row-one">
+                <div class="icon click{{frdID}}"><img src="{{icon}}" alt="img"></div>
+                <div class="username click{{frdID}}">{{username}}</div>
+                <div class="name click{{frdID}}"> {{firstname}} {{lastname}}</div>
+                
+                <button class="button-remove-friend" onclick="remove_friend({{frdID}})">
+                    <img src="../static/images/remove-friend.svg" alt="remove_frd">
+                </button>
+
+            </div>
+        </div>
+
+
+        <script>
+            document.querySelectorAll('.click{{frdID}}').forEach(item => {
+                item.addEventListener('click', event => {
+                    window.location.href = "/profile/{{frdID}}";
+                })
+            })
+        </script>
+{%endmacro%}

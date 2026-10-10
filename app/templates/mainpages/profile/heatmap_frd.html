@@ -1,0 +1,250 @@
+<div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px; width: 100%;">
+    <button id="prevMonth" style="all: unset; border-radius: 5px; background-color: #A85151; padding: 2.3px">Previous</button>
+    <h2 id="currentMonth" style="margin: 0 20px;">January</h2>
+    <button id="nextMonth" style="all: unset; border-radius: 5px; background-color: #A85151; padding: 2.3px;">Next</button>
+</div>
+
+
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1"></script>-->
+
+<canvas id="calendar" ></canvas>
+
+<script>
+    // defines the current month and year variables
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth(); // 0-11 for months
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "Sept", "October", "November", "December"
+    ];
+
+    //console.log(currentMonth, monthNames[currentMonth], currentYear)
+
+
+
+
+    // updates the month
+    function updateDisplayedMonth() {
+        document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        //console.log(currentMonth, currentYear);
+    }
+
+    // loads the month when the page is loaded
+    updateDisplayedMonth();
+</script>
+
+
+<script>
+fetch('/api/cards/{{id}}')
+    .then(response => response.json())
+    .then(data => {
+        
+        // breaks down the date of each workout into lots of different bits
+        const workoutDays = data.map(item => { // then generates an array with all the aspects
+            const date = new Date(item.start); // generates a date object from the date
+            return {
+                year: date.getFullYear(),
+                month: date.getMonth() + 1, // month as 1-12
+                day: date.getDate(), // Date in the month
+                dayOfWeek: date.getDay(), // day of the week 0-6, sun-sat
+                weekOfMonth: Math.floor((date.getDate()) / 7) + 1, // which week is it in
+                ID: item.ID
+            };
+        });
+        
+        //console.log(data)
+        //console.log(workoutDays)
+
+
+        
+        function day_filter() { // gets rid of workouts that weren't logged in the curent month
+            let filteredDays = workoutDays.map(item => {
+                if (item.month == currentMonth+1 && item.year == currentYear) {
+                    return item; // only returns a value if the workout is in the current month
+                }
+            })
+            //console.log(filteredDays.filter(item => item))
+
+            return filteredDays.filter(item => item);
+
+        }
+
+        //day_filter()
+
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            currentMonth += 1; // adds 1 to the date
+            if (currentMonth > 11) {
+                currentMonth = 0; // adjusts the year when you add a month to december
+                currentYear += 1;
+            }
+            updateDisplayedMonth();
+            chart.data.datasets[0].data = generateData(currentMonth, currentYear)
+            chart.update()
+        });
+
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            currentMonth -= 1; // takes away 1 from the date
+            if (currentMonth < 0) {
+                currentMonth = 11; // adjusts the year when you take away a month from jan
+                currentYear -= 1;
+            }
+            updateDisplayedMonth();
+            chart.data.datasets[0].data = generateData(currentMonth, currentYear)
+            chart.update()
+        });
+
+
+
+
+        const data_for_hover = data.map(item => {
+            const title = item.title; // gets the title of each card
+
+            const date_object = new Date(item.start) // generates the date object
+
+            const date = date_object.toLocaleDateString() // returns a string of the date
+
+            // returns the 5 characters of the time, I do this to avoid the seconds column
+            const time = date_object.toLocaleTimeString().substring(0,5) 
+
+            return {info: `${title} - ${date} ${time}`, id: item.ID} // combines the strings into one
+        })
+
+
+        //console.log(data_for_hover)
+
+        
+        function generateData(currentMonth, currentYear) {
+            // filter out the workouts that took place on a different month
+            const filteredDays = day_filter();
+            //console.log(filteredDays)
+
+            // logs a new array, where x and y values for the calendar are displayed
+            /*console.log(filteredDays.map(item => {
+                return {
+                    x: item.dayOfWeek,
+                    
+                    y: item.weekOfMonth
+                }
+            }))*/
+        
+
+
+
+            // combine values to get a number of workouts per day
+            const combinedData = {};
+            filteredDays.forEach(item => { // a for loop
+                if (item){
+                    const day = item.day;
+                    // counts the occurrences of workouts, creates a new entry with a value of 1
+                    // if it didn't exist beforehand
+                    combinedData[day] = (combinedData[day] || 0) + 1; 
+                }
+            });
+
+            return filteredDays.map(item => {
+                return {
+                    x: item.dayOfWeek,
+                    y: item.weekOfMonth,
+                    id: item.ID
+                }
+            })
+        }
+
+        
+        const ctx = document.getElementById('calendar').getContext('2d');
+    
+
+        const chart = new Chart(ctx, {
+            type: 'matrix',
+            data: {
+                datasets: [{
+                    label: 'data', // this defines what the data is called
+                    data: generateData(currentMonth, currentYear), // where the graph gets the data
+
+                    borderWidth: 1, // this border allows the user to see the datapoint more clearly
+                    borderColor: 'rgba(20, 23, 24, 0.47)',
+                    backgroundColor: 'rgba(222, 134, 19, 0.35)' // a nice colour for the datapoints
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title(context) { // this is just for fun at the moment
+                                return 'Workout';
+                            },
+                            label(context) {
+                                // gets the data of the point something like this - {x: 0, y: 5, id: 17}
+                                const point = context.raw; 
+                                
+                                // finds the element of the data_for_hover array that matches the id of the selected point 
+                                const hover_data = data_for_hover.find(item => item.id === point.id)
+                                
+                                return `${hover_data.info}`;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'category',
+                        //labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // days  of the week
+                        labels: [0, 1, 2, 3, 4, 5, 6],
+                        title: {
+                            display: true,
+                            text: 'Day of the Week'
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                                return dayMap[index]; // replaces the 0-6 with the actual day
+                            }
+                        }
+                    },
+                    y: {
+                        type: 'category',
+                        //labels: ['1', '8', '15', '22', '29'], // week starting date
+                        labels: [1, 2, 3, 4, 5],
+                        title: {
+                            display: true,
+                            text: 'Week of the Month'
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                //return 7*(index) + 1; // this replaces the 1-5 with 1,8,22,29
+                                return index+1;
+                            }
+                        }
+                    }
+                },
+                onClick: function(event, items) {
+                    //console.log(items)
+                    //console.log(event)
+
+                    //console.log(this.data.datasets[0].data[0])
+
+
+                    const index = items[0].index; // generates the index of the point
+                    const index_of_dataset = items[0].datasetIndex
+
+                    // gets the data attributes of the point that was clicked
+                    const point = this.data.datasets[index_of_dataset].data[index]
+                    window.location.href = `/chat/${point.id}`
+                }
+            }
+        });
+    })
+    .catch(error => console.error('Error', error));
+</script>

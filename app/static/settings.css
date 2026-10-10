@@ -1,0 +1,30 @@
+.main-content {
+    display: flex; /*aligns everything to the centre of the page*/
+    justify-content: center;/*in a large flex box*/
+    flex-direction: column;/*with a 100% of the screen width*/
+    width: 100%;
+    
+}
+.buttons { /*separate flex box for the buttons*/
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /*creates a proper spacing between the buttons*/
+    align-items: center;
+}
+
+
+button { /*removes the border from the buttons and makes them curly*/
+    border: none; 
+    border-radius: 3px;
+
+    padding-top: 5px; /*makes the buttons thicker in size*/
+    padding-bottom: 5px;
+
+    background-color: #A85151; /*handles the background colour*/
+    transition: 0.1s ease;/*sets the speed of the transition to 0.1 seconds*/
+    font-size: 18px;
+}
+
+button:hover {/*when the buttons are hovered over, they will increase in size*/
+    transform: scale(1.05); 
+} 

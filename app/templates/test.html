@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <button onclick="download()", style="">Download data</button>
+
+    <script>
+      function download() {
+        // {... | safe} stops " being replaced with &#34;
+        var file = new File([`{{account_data | safe}}`], 'account.txt', {type: "text/plain:charset=UTF-8"});
+
+        url = window.URL.createObjectURL(file);
+        var link = document.createElement("a");
+        //console.log(url)
+
+
+        link.style = "display: none";
+        link.href = url;
+        link.download = file.name;
+        link.click();
+
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url);
+
+      }
+    </script>
+</body>
+</html>

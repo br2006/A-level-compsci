@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/profile.css">
+    <link rel="stylesheet" href="../static/settings.css">
+{% endblock head %}
+
+{% block title %}Your data{% endblock title %}
+
+{% block side %}
+    <div class="sidebar">
+        <a class="aaa home" href="/"><img src="../static/images/right-arrow.svg" alt="img"></a>
+        <a class="aaa settings" href="settings">settings</a>
+        <a class="aaa settings active" href="manage">manage-data</a>
+        <a class="aaa progress" href="/logout">logout</a>
+    </div>
+{% endblock side %}
+
+{% block body %}
+  
+    {% macro friend(icon, username, firstname, lastname) %}
+        <div class="suggested-friend"> <!--the same code as before in the profile page-->
+            <div class="row-onee">
+                <div class="icone"><img src="{{icon}}" alt="img"></div>
+                <div class="usernamee">{{username}}</div>
+                <div class="namee"> {{firstname}} {{lastname}}</div>
+
+            </div>
+        </div>
+    {%endmacro%}
+
+    <div class="main-content">
+        {{friend("../static/images/icon.svg", current_user.username, current_user.firstname, current_user.lastname)}}
+        <div class="buttons">
+          <button onclick="download()", style="">Download data</button>
+          <!--the delete_w() function will reveal the true button that will delete the user's workouts-->
+          <button onclick="delete_w()", style="">Delete all of your workouts</button>
+          <button id="del" onclick="actually_del()", style="display: none;">Click to delete</button>
+        </div>
+    </div>
+
+    <script>
+      function download() {
+
+        // {... | safe} stops " being replaced with &#34;
+        var file = new File([`{{account_data | safe}}`], 'account.txt', {type: "text/plain:charset=UTF-8"});
+
+
+
+        url = window.URL.createObjectURL(file);
+        var link = document.createElement("a");
+
+
+        link.style = "display: none";
+        link.href = url;
+        link.download = file.name;
+        link.click();
+
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url);
+
+      }
+      function delete_w() {
+        document.getElementById("del").style.display = "block";
+      }
+
+      function actually_del() {
+        fetch('/delete-workouts').then(location.reload())
+      }
+    </script>
+{% endblock body %}

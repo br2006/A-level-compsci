@@ -1,0 +1,60 @@
+.suggested-friend {
+    margin-left: 5px;
+    width: calc(100% - 13px);
+}
+
+.row-onee {
+    
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.header{
+    width: 100%;
+    text-align: center;
+}
+
+
+.icone {
+    align-content: center;
+    margin-left: 10px;
+}
+.usernamee, .namee {
+    font-size: x-large;
+    margin-top: 3px;
+    margin-left: 15px;
+}
+
+.usernamee {
+    flex: 1;
+}
+
+.namee {
+    padding-right: 20px;
+}
+
+
+.button-add-friend, .button-remove-friend {
+    width: 40px;
+    height: 40px;
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 10px;
+}
+
+img {
+    /* padding-left: 10px; */
+    object-fit: contain;
+    width: 30px;
+    margin: 0 auto;
+}
+

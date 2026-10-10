@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/card.css"><!--Links the styling files-->
+    <link rel="stylesheet" href="../static/home.css">
+{% endblock head %}
+
+{% block side %}
+    <div class="sidebar"> <!--Defines the fields of the navigation bar-->
+        <a class="aaa home active" href="{{url_for('main.index')}}">home</a>
+        <a class="aaa friends" href="{{url_for('main.friends')}}">friends</a>
+        <a class="aaa progress" href="progress">progress</a>
+        <a class="aaa leaderboards" href="leaderboards">leaderboards</a>
+        <a class="aaa settings" href="settings">settings</a>
+    </div>
+{% endblock side %}
+
+
+
+
+{% block body %}
+    {% from "macros.html" import card with context%}
+
+    {% include "flashed.html" %}
+
+    {% for item in cards %}
+        {{card("../static/images/icon.svg", item['username'], item['start'], item['title'], item['description'], item['duration'], item['address'], item['points'], item['likes'], item['IDD'], item['uID'], loop.index)}}
+    {% endfor %}
+
+    <button class="open-button" onclick="openForm()"><img src="../static/images/new-card.svg" alt=""></button>
+    <!--<p class="myForm" id="myForm">helloooo</p>-->
+    <div class="form-popup" id="myForm">
+        <form method="post">
+            <h1>New Card</h1>
+            <label for="Title"><b>Title</b></label>
+            <input type="text" placeholder="Enter Title" name="title" id="Title" required>
+
+            <label for="Description"><b>Description</b></label>
+            <input type="text" placeholder="Enter Description" name="description" id="Description" required>
+
+            <label for="Time"><b>Time</b></label>
+            <input type="datetime-local" placeholder="Enter Time" name="time" id="Time" required>
+
+            <label for="Duration"><b>Duration</b></label>
+            <input type="text" placeholder="Enter Duration (minutes)" name="duration" id="Duration" required>
+
+            <label for="Difficulty"><b>Difficulty</b></label>
+            <input type="text" placeholder="Enter Difficulty (1-10)" name="difficulty" id="Difficulty" required>
+
+            <label for="Address"><b>Club name</b></label>
+            <input type="text" placeholder="Enter the name of the club" name="address" id="Address" required>
+
+
+            <button type="submit" class="btn">Create</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
+
+    <script>
+        function add_like(cardID) { // takes in the card's id
+            fetch("/addLike", {
+                method: "POST", // sends a post request with the id to the addlike url
+                body: JSON.stringify({ cardID: cardID }),
+              }).then(() => {
+                location.reload(); // reloads the page
+              })
+        }
+    </script>
+
+    <script>
+        function openForm() {
+          document.getElementById("myForm").style.display = "block";
+        }
+        
+        function closeForm() {
+          document.getElementById("myForm").style.display = "none";
+        }
+    </script>
+{% endblock body %}

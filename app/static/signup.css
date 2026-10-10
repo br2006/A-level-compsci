@@ -1,0 +1,70 @@
+body {
+    /* background-color: rgb(66, 184, 234); */
+     
+    animation: fadein ease 0.25s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fadein {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+
+label {
+    font-size: 28px;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+}
+
+.sign_up {
+    text-align: center;
+    width: calc(100% - 53px);
+    background-color: rgb(167, 69, 69);
+
+
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: baseline;
+    text-align: center;
+}
+
+.email {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* background-color: brown; */
+    /* border-radius: 10px; */
+}
+
+input {
+    width: 100%;
+    height: 40px;
+
+    border: 6px solid #EA8044;
+    border-radius: 15px;
+    /* background-color: rgb(215, 115, 34); */
+    background-color: #EA8044;
+
+    
+}
+
+input:focus {
+    background-color: lightblue;
+    border: 6px solid lightblue;
+
+}
+
+input::placeholder {
+    color: black;
+    font-size: 100%;
+    text-align: center;
+}
+
+button {
+    background-color: #EA8044;
+    border: none;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}

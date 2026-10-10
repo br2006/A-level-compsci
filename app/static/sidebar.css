@@ -1,0 +1,47 @@
+body {
+    background-color: #DA7E7E;
+
+}
+
+div {
+    float: left;
+}
+.sidebar {
+    height: 100%;
+    width: 60px;
+    position: fixed; 
+    z-index: 1;
+    top: 0; 
+    left: 0;
+    /* background-color: aqua; */
+    background-color: #90CAFF;
+    overflow-x: hidden;
+    padding-top: 10px;
+}
+
+.sidebar a:hover {
+    color: white;
+}
+.aaa {
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    padding: 5px 10px 6px 16px;
+    text-decoration: none;
+    color: black;
+    font-size: 25px;
+    display: block ;
+}
+
+.main {
+    height: 100%;
+    margin-left: 53px;
+    width: calc(100% - 47px);
+    /* padding: 0px 0px; */
+    /* background-color: rgb(204, 21, 146); */
+}
+
+.active {
+    color: white;
+}
+
+

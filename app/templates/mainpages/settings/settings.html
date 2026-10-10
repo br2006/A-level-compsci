@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/profile.css">
+    <link rel="stylesheet" href="../static/settings.css">
+{% endblock head %}
+
+
+{% block side %}
+    <!--The code for the sidebar-->
+    <div class="sidebar">
+        <a class="aaa home" href="/"><img src="../static/images/right-arrow.svg" alt="img"></a>
+        <a class="aaa settings active" href="settings">settings</a>
+        <a class="aaa settings" href="manage">manage-data</a>
+        <a class="aaa progress" href="/logout">logout</a>
+    </div>
+{% endblock side %}
+
+
+{% block body %}
+    <!--Acts as the header to each settings page-->
+    {% macro friend(icon, username, firstname, lastname) %}
+        <div class="suggested-friend"> <!--the same code as before in the profile page-->
+            <div class="row-onee">
+                <div class="icone"><img src="{{icon}}" alt="img"></div>
+                <div class="usernamee">{{username}}</div>
+                <div class="namee"> {{firstname}} {{lastname}}</div>
+
+            </div>
+        </div>
+    {%endmacro%}
+
+    <!--Using the current_user variable that was passed in-->
+    <div class="main-content">
+        {{friend("../static/images/icon.svg", current_user.username, current_user.firstname, current_user.lastname)}}
+        <div class="buttons">
+            <button class="setting-button" onclick="manage()">Manage your data</button>
+
+            <button class="setting-button" onclick="dlt()">Delete your account</button>
+
+            <!--The button is hidden automatically untill the delete button is pressed: revealing it-->
+            <button class="setting-button" id="end" onclick="confirm()" style="display: none;">Click to delete your account</button>
+
+            <button onclick="logout()">logout</button>
+
+        </div>
+    </div>
+
+    <!--Script to handle the buttons-->
+    <script>
+        function manage() { // redirects to /manage
+            window.location.href = '/manage'
+        }
+        function dlt() {
+            document.getElementById("end").style.display = "block";
+        }
+        function confirm() {
+            fetch("/confirm").then(window.location.href = '/logout')
+        }
+        function logout(){
+            fetch("{{url_for('auth.logout')}}").then(() => {
+                window.location.href = '/'
+            })
+        }
+    </script>
+{% endblock body %}

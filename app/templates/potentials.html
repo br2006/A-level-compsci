@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/friends.css">
+{% endblock head %}
+
+{% block title %}Friends{% endblock title %}
+
+{% block side %}
+    <div class="sidebar">
+        <a class="aaa home" href="home">home</a>
+        <a class="aaa friends active" href="friends">friends</a>
+        <a class="aaa progress" href="progress">progress</a>
+        <a class="aaa leaderboards" href="leaderboards">leaderboards</a>
+        <a class="aaa settings" href="settings">settings</a>
+    </div>
+{% endblock side %}
+
+{% block body %}
+    {% from "macros.html" import suggest_friends with context%}
+
+    <div class="header"><h1>Search results</h1></div>
+
+    {% for i in potentials %}
+        {{suggest_friends("../static/images/icon.svg", i['username'], i['firstname'], i['lastname'], i['ID'])}}
+    {% endfor %}
+    
+    <script>
+        function add_friend(frdID) {
+            fetch("/addFriend", {
+                method: "POST",
+                body: JSON.stringify({ friendID: frdID }),
+              }).then((_res) => {
+                window.location.href = "/friends";
+              });
+        }
+    </script>
+
+{% endblock body %}

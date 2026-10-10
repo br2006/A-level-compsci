@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <link rel="stylesheet" href="../static/welcome.css">
+</head>
+<body>
+    {% include "flashed.html" %}
+
+    <h1>Hello (:</h1>
+    <p>
+        <a href="{{ url_for('auth.login') }}">Login</a> or 
+        <a href="{{ url_for('auth.signup') }}">Sign Up</a>
+    </p>
+    
+
+</body>
+</html>

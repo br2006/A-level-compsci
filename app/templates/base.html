@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/sidebar.css">
+    {% block head %}{% endblock head %}
+
+    
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+<body>
+    
+    <!--<div class="sidebar">
+        <a class="aaa home" href="home">home</a>
+        <a class="aaa friends" href="friends">friends</a>
+        <a class="aaa progress" href="progress">progress</a>
+        <a class="aaa leaderboards" href="leaderboards">leaderboards</a>
+        <a class="aaa settings" href="settings">settings</a>
+        </div>-->
+    
+    
+    {% block side %}{% endblock side %}
+    <div class="main">
+        {% block body %}{% endblock body %}
+    </div>
+    
+</body>
+</html>

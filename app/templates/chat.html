@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/card.css"> <!--references the css files defined earlier-->
+    <link rel="stylesheet" href="../static/sidebar.css">
+    <link rel="stylesheet" href="../static/chat.css"><!--I will add to this as I code this-->
+    <title>Chat</title>
+</head>
+<body>
+    {% from "macros.html" import card with context%} <!--imports the card macro-->
+
+    {% macro chat(comment, username, ID) %} <!--creating the macro-->
+    <div class="chat-box">
+        <div class="chat-row">
+            <div class="user"><p><strong>{{ username }}</strong>  {{ comment }}</p></div>
+            <div class="comment"></div>
+        </div>
+    </div>
+    {%endmacro%}
+
+    {{card("../static/images/icon.svg", username, item['start'], item['title'], item['description'], item['duration'], item['address'], item['points'], item['likes'], item['IDD'], item['uID'])}}
+
+
+    <form method="post">
+        <div class="send-chat"> <!--A region of the page to enter a new chat-->
+            <input type="textbox" name="chat" placeholder="type here ...">
+            <button type="submit"><img src="../static/images/send.svg" alt="send"></button>
+        </div>
+    </form>
+
+    {% for i in chats %}
+        {{chat(i['comment'], i['username'], i['ID'])}}
+    {% endfor %}
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/leaderboard.css">
+{% endblock head %}
+
+{% block side %}
+    <div class="sidebar">
+        <a class="aaa home" href="home">home</a>
+        <a class="aaa friends" href="friends">friends</a>
+        <a class="aaa progress" href="progress">progress</a>
+        <a class="aaa leaderboards active" href="leaderboards">leaderboards</a>
+        <a class="aaa settings" href="settings">settings</a>
+    </div>
+{% endblock side %}
+
+
+{% block body %}
+    <iframe src="/leaderboard_frame/{{leaderboardID}}" frameborder="0"></iframe>
+
+    <!--<button class="open-options" onclick="openForm()"><img src="../static/images/new-card.svg" alt=""></button>
+
+    
+    <div class="search">
+        <form method="post">
+            <div class="searchbar">
+                <input type="textbox" name="leaderboard_searcher" placeholder="Enter the name of the leaderboard ...">
+                <button type="submit"><img src="../static/images/send.svg" alt="send"></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-popup" id="myForm">
+        <form method="post">
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
+
+    <script>
+        function openForm() {
+            document.getElementById("myForm").style.display = "block";
+        }
+          
+        function closeForm() {
+            document.getElementById("myForm").style.display = "none";
+        }
+    </script>-->
+{% endblock body %}

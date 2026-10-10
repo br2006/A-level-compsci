@@ -1,0 +1,26 @@
+body {
+    text-align: center;
+    background-color: aquamarine;
+    
+    animation: fadein ease 0.25s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fadein {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+h1 {
+    font-size: 700%;
+}
+
+p {
+    font-size: 300%;
+    padding-top: 10%;
+}
+
+a {
+    /* color: pink; */
+    text-decoration: none;
+}
